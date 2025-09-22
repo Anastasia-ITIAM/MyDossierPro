@@ -3,7 +3,6 @@ import { getMe, logout, getToken, isTokenExpired } from './signIn.js';
 export async function initHeader() {
     console.log("=== initHeader démarré ===");
 
-    // Récupération du token
     const token = getToken();
     console.log("Token récupéré :", token);
 
@@ -17,41 +16,41 @@ export async function initHeader() {
         return;
     }
 
-    // Récupération des infos utilisateur
-    let user;
+    let response;
     try {
-        user = await getMe();
+        response = await getMe();
     } catch (err) {
         console.error("Erreur getMe() :", err);
         return;
     }
-    console.log("Utilisateur récupéré via getMe() :", user);
 
-    if (!user) {
+    if (!response || !response.success || !response.user) {
         console.log("Aucun utilisateur trouvé, abandon initHeader");
         return;
     }
 
-    // Récupération des éléments du header
+    const user = response.user;
+    console.log("Utilisateur récupéré via getMe() :", user);
+
+    // Rendre l'utilisateur accessible à tous les scripts
+    window.currentUser = user;
+    window.currentUserId = user.id;
+    sessionStorage.setItem("currentUser", JSON.stringify(user));
+
     const userGreeting = document.getElementById('user-greeting');
     const authButtonsContainer = document.getElementById('auth-buttons');
-
-    console.log("userGreeting trouvé ?", !!userGreeting);
-    console.log("authButtonsContainer trouvé ?", !!authButtonsContainer);
 
     if (!userGreeting || !authButtonsContainer) {
         console.log("Header incomplet, abandon initHeader");
         return;
     }
 
-    // Masquer les boutons connexion/inscription
     authButtonsContainer.style.display = 'none';
-    console.log("Boutons connexion/inscription masqués");
 
-    // Injecter pseudo + dropdown profil avec image
+    const pseudo = user.username || user.pseudo || 'Utilisateur';
     userGreeting.innerHTML = `
         <div class="dropdown d-inline-block user-dropdown">
-            <span>Bonjour, ${user.pseudo}</span>
+            <span>Bonjour, ${pseudo}</span>
             <button class="btn btn-sm dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left:5px; padding: 0; border: none; background: transparent;">
                 <img src="/assets/icone-utilisateur.png" alt="Profil" width="24" height="24" style="border-radius:50%;">
             </button>
@@ -63,9 +62,8 @@ export async function initHeader() {
         </div>
     `;
 
-    console.log("UserGreeting injecté avec pseudo :", user.pseudo);
+    console.log("UserGreeting injecté avec pseudo :", pseudo);
 
-    // Déconnexion
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => logout());

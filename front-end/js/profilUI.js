@@ -1,16 +1,13 @@
 export function initProfilUI() {
-
     const profileImage = document.getElementById("profileImage");
     const profilePseudo = document.getElementById("profilePseudo");
     const profileRole = document.getElementById("profileRole");
     const profileCredits = document.getElementById("profileCredits");
 
-    const userId = window.currentUserId;
-    if (!userId) {
-        console.error("[ProfilUI] Aucun utilisateur connecté !");
-        return;
-    }
-
+    // Récupération de l'utilisateur connecté
+    let user = window.currentUser || JSON.parse(sessionStorage.getItem("currentUser"));
+    if (!user || !user.id) return console.error("[ProfilUI] Aucun utilisateur connecté !");
+    const userId = user.id;
     const storageKey = `userProfile_${userId}`;
 
     const roleLabels = {
@@ -29,69 +26,40 @@ export function initProfilUI() {
         myCars: document.getElementById("btnMyCars")
     };
 
-    // Bloquer l’accès au rôle chauffeur si profil incomplet
     if (buttons.driver) {
-        buttons.driver.addEventListener("click", (event) => {
-            const requiredFields = ["email", "pseudo", "firstName", "lastName", "birthDate", "postalAddress", "phone"];
+        buttons.driver.addEventListener("click", (e) => {
+            const requiredFields = ["email", "username", "firstName", "lastName", "birthDate", "postalAddress", "phone"];
             const data = JSON.parse(sessionStorage.getItem(storageKey)) || {};
-            const incomplete = requiredFields.some(field => !data[field] || data[field].trim() === "");
-            if (incomplete) {
-                event.preventDefault();
+            if (requiredFields.some(f => !data[f] || data[f].trim() === "")) {
+                e.preventDefault();
                 alert("Vous devez compléter tous les champs de votre profil avant de devenir chauffeur·euse !");
                 window.location.href = "profil.html";
             }
         });
     }
 
-    // Fonction de mise à jour de l'UI
     function refreshUI(dataOverride = null) {
         const data = dataOverride || JSON.parse(sessionStorage.getItem(storageKey)) || {};
         const userRole = data.role || "ROLE_UNKNOWN";
 
-        // Photo et pseudo
-        if (profileImage) {
-            profileImage.src = data.profilePhotoUrl 
-                ? (data.profilePhotoUrl.startsWith("http") 
-                    ? data.profilePhotoUrl 
-                    : `http://localhost:8081${data.profilePhotoUrl}`) 
-                : "";
-        }
-        if (profilePseudo) profilePseudo.textContent = data.pseudo || "";
+        if (profileImage) profileImage.src = data.profilePhotoUrl
+            ? (data.profilePhotoUrl.startsWith("http") ? data.profilePhotoUrl : `http://localhost:8080${data.profilePhotoUrl}`)
+            : "";
+        if (profilePseudo) profilePseudo.textContent = data.username || "";
         if (profileRole) profileRole.textContent = roleLabels[userRole] || userRole;
+        if (profileCredits) profileCredits.textContent = Number.isInteger(data.credits) ? data.credits : 0;
 
-        // Crédits
-        if (profileCredits) {
-            const displayedCredits = Number.isInteger(data.credits) ? data.credits : 0;
-            profileCredits.textContent = displayedCredits;
-            console.log("[ProfilUI] Crédits affichés :", displayedCredits);
-        }
-
-        // Masquer tous les boutons par défaut
-        Object.values(buttons).forEach(btn => {
-            if (btn) btn.style.setProperty("display", "none", "important");
-        });
-
-        // Afficher uniquement les boutons autorisés pour le rôle
-        if (visibleByRole[userRole]) {
-            visibleByRole[userRole].forEach(key => {
-                if (buttons[key]) buttons[key].style.setProperty("display", "inline-block", "important");
-            });
-        }
+        Object.values(buttons).forEach(btn => { if (btn) btn.style.setProperty("display", "none", "important"); });
+        if (visibleByRole[userRole]) visibleByRole[userRole].forEach(key => { if (buttons[key]) buttons[key].style.setProperty("display", "inline-block", "important"); });
     }
-    
-    // IMPORTANT : ne pas rafraîchir tout de suite (sinon données vides)
 
-    // Quand d’autres modules (initProfil) finissent de charger le user
     window.addEventListener("profileDataReady", (e) => {
         if (e.detail && typeof e.detail === "object") {
             sessionStorage.setItem(storageKey, JSON.stringify(e.detail));
-            refreshUI(e.detail); // UI mise à jour immédiatement
+            refreshUI(e.detail);
         }
     });
 
-    // Si jamais on a déjà des données stockées (cas d’un rechargement)
     const cached = JSON.parse(sessionStorage.getItem(storageKey));
-    if (cached && cached.pseudo) {
-        refreshUI(cached);
-    }
+    if (cached && cached.username) refreshUI(cached);
 }

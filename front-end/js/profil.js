@@ -1,63 +1,71 @@
-export function initProfil() {
+import { getToken, isTokenExpired, getMe } from './signIn.js';
 
-    // Utilitaires
+export async function initProfil() {
+    const form = document.getElementById('updateProfileForm');
+    if (!form) return console.error("Formulaire #updateProfileForm non trouvé");
+
+    const profileAlert = document.querySelector('.col-md-8 h5.text-danger');
+
+    // Vérification token et récupération utilisateur
+    const token = getToken();
+    if (!token || isTokenExpired(token)) {
+        console.error("Utilisateur non connecté !");
+        if (profileAlert) profileAlert.style.display = 'block';
+        return;
+    }
+
+    let response;
+    try {
+        response = await getMe();
+    } catch (err) {
+        console.error("Erreur getMe() :", err);
+        return;
+    }
+
+    if (!response || !response.success || !response.user) {
+        console.error("Aucun utilisateur connecté !");
+        if (profileAlert) profileAlert.style.display = 'block';
+        return;
+    }
+
+    const user = response.user;
+    const userId = user.id;
+    const storageKey = `userProfile_${userId}`;
+
+    // Stocker pour initProfilUI
+    window.currentUser = user;
+    window.currentUserId = userId;
+    sessionStorage.setItem("currentUser", JSON.stringify(user));
+
     function sanitizeInput(input) {
         if (typeof input !== "string") return input;
         return input.replace(/[<>]/g, "");
     }
 
-    function safeAlert(message) {
-        const div = document.createElement('div');
-        div.textContent = Array.isArray(message) ? message.join('\n') : message;
-        alert(div.textContent);
+    function safeAlert(msg) {
+        alert(Array.isArray(msg) ? msg.join('\n') : msg);
     }
 
-    // Vérifie si le profil est complet
     function isProfileComplete(userData) {
-        const requiredFields = ['email', 'pseudo', 'firstName', 'lastName', 'birthDate', 'postalAddress', 'phone'];
-        return requiredFields.every(field => userData[field] && userData[field].trim() !== '');
+        const requiredFields = ['email', 'username', 'firstName', 'lastName', 'birthDate', 'postalAddress', 'phone'];
+        return requiredFields.every(f => userData[f] && userData[f].trim() !== '');
     }
 
-    // Sélection du formulaire et alert
-    const form = document.getElementById('updateProfileForm');
-    if (!form) {
-        console.error("Formulaire #updateProfileForm non trouvé");
-        return;
-    }
-
-    const profileAlert = document.querySelector('.col-md-8 h5.text-danger');
-    const userId = window.currentUserId;
-    if (!userId) {
-        console.error("Aucun utilisateur connecté !");
-        return;
-    }
-
-    const storageKey = `userProfile_${userId}`;
-
-    // Chargement des données utilisateur
     async function loadUserData() {
         try {
             const storedData = JSON.parse(sessionStorage.getItem(storageKey)) || {};
             const profileImage = document.getElementById("profileImage");
 
-            // Étape 1 : si données locales -> afficher direct
-            if (Object.keys(storedData).length > 0) {
+            if (Object.keys(storedData).length > 0)
                 window.dispatchEvent(new CustomEvent("profileDataReady", { detail: storedData }));
-            }
 
-            // Étape 2 : toujours récupérer les données serveur
-            const res = await fetch(`http://localhost:8081/api/user/${userId}`);
+            const res = await fetch(`http://localhost:8080/api/user/${userId}`);
             const result = await res.json();
 
-            if (!res.ok || !result.success) {
-                console.error("Impossible de récupérer les données serveur");
-                return;
-            }
+            if (!res.ok || !result.success) return console.error("Impossible de récupérer les données serveur");
 
-            const serverData = result.user;
-            const userData = { ...storedData, ...serverData };
+            const userData = { ...storedData, ...result.user };
 
-            // Remplissage du formulaire
             for (const key in userData) {
                 const input = form.querySelector(`[name="${key}"]`);
                 if (input) input.value = sanitizeInput(userData[key]) || '';
@@ -66,12 +74,10 @@ export function initProfil() {
             if (profileImage && userData.profilePhotoUrl) {
                 profileImage.src = userData.profilePhotoUrl.startsWith("http")
                     ? userData.profilePhotoUrl
-                    : `http://localhost:8081${userData.profilePhotoUrl}`;
+                    : `http://localhost:8080${userData.profilePhotoUrl}`;
             }
 
             sessionStorage.setItem(storageKey, JSON.stringify(userData));
-
-            // Étape 3 : notifier l’UI avec les données fraîches
             window.dispatchEvent(new CustomEvent("profileDataReady", { detail: userData }));
 
         } catch (err) {
@@ -79,52 +85,38 @@ export function initProfil() {
         }
     }
 
-    loadUserData();
+    await loadUserData();
 
-    // Soumission du formulaire
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const formData = new FormData(form);
-        for (let [key, value] of formData.entries()) {
-            if (typeof value === "string") formData.set(key, sanitizeInput(value));
-        }
+        for (let [k, v] of formData.entries()) if (typeof v === "string") formData.set(k, sanitizeInput(v));
 
         try {
-            const res = await fetch(`http://localhost:8081/api/user/${userId}`, {
-                method: "POST",
-                body: formData
-            });
-
+            const res = await fetch(`http://localhost:8080/api/user/${userId}`, { method: "POST", body: formData });
             const result = await res.json();
 
-            if (!res.ok || !result.success) {
-                return safeAlert(result.message || `Erreur serveur : ${res.status}`);
-            }
+            if (!res.ok || !result.success) return safeAlert(result.message || `Erreur serveur : ${res.status}`);
 
             safeAlert("Profil mis à jour !");
             const profileImage = document.getElementById("profileImage");
             const updatedData = JSON.parse(sessionStorage.getItem(storageKey)) || {};
 
-            // Mise à jour des données locales et du formulaire
             for (const key in result.user) {
                 updatedData[key] = result.user[key];
                 const input = form.querySelector(`[name="${key}"]`);
-                if (input && typeof result.user[key] === "string") {
-                    input.value = sanitizeInput(result.user[key]);
-                }
+                if (input && typeof result.user[key] === "string") input.value = sanitizeInput(result.user[key]);
             }
 
             if (profileImage && result.user.profilePhotoUrl) {
                 profileImage.src = result.user.profilePhotoUrl.startsWith("http")
                     ? result.user.profilePhotoUrl
-                    : `http://localhost:8081${result.user.profilePhotoUrl}`;
+                    : `http://localhost:8080${result.user.profilePhotoUrl}`;
                 updatedData.profilePhotoUrl = result.user.profilePhotoUrl;
             }
 
             sessionStorage.setItem(storageKey, JSON.stringify(updatedData));
-
-            // Déclenchement de l'événement pour mettre à jour l'UI immédiatement
             window.dispatchEvent(new CustomEvent("profileDataReady", { detail: updatedData }));
 
         } catch (err) {
@@ -133,11 +125,9 @@ export function initProfil() {
         }
     });
 
-    // Écoute pour cacher l'alerte si profil complet
     window.addEventListener('profileDataReady', (e) => {
+        if (!profileAlert) return;
         const userData = e.detail;
-        if (profileAlert) {
-            profileAlert.style.display = isProfileComplete(userData) ? 'none' : 'block';
-        }
+        profileAlert.style.display = isProfileComplete(userData) ? 'none' : 'block';
     });
 }
