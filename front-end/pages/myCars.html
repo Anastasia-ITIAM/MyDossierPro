@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EcoRide</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- CSS perso -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Script perso -->
+    <script type="module" src="/js/main.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+</head>
+
+<body class="driver-page">
+<!-- Header inclus via JS -->
+<div id="header-placeholder"></div>
+
+<div class="container my-4" style="max-width:900px;">
+    <h2 class="text-center mb-4">Mes véhicules 🧩</h2>
+
+    <!-- Container pour les véhicules existants -->
+    <div id="cars-list">
+    </div>
+
+     <!-- Formulaire ajout véhicule -->
+    <h2 class="text-center" style="margin-top: 70px;">Ajouter un nouveau véhicule 🧩</h2>
+    <form class="card p-3 shadow-sm eco-box mb-4" id="driverForm">
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label>Plaque *</label>
+                <input type="text" class="form-control" name="license_plate">
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Date immatriculation *</label>
+                <input type="date" class="form-control" name="registration_date">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <label>Marque *</label>
+                <input type="text" class="form-control" name="brand">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label>Modèle *</label>
+                <input type="text" class="form-control" name="model">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label>Couleur</label>
+                <input type="text" class="form-control" name="color">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label>Énergie</label>
+                <input type="text" class="form-control" name="fuel_type">
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Places disponibles *</label>
+                <input type="number" class="form-control" name="available_seats" min="1">
+            </div>
+        </div>
+
+        <label>Préférences personnalisées</label>
+        <textarea class="form-control mb-3" name="custom_preferences" rows="3"></textarea>
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Ajouter le véhicule</button>
+        </div>
+    </form>
+</div>
+
+<!-- Footer via JS -->
+<div id="footer-placeholder"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

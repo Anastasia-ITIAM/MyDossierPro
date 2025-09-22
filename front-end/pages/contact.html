@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EcoRide</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- CSS perso -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Script perso -->
+    <script type="module" src="/js/main.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+</head>
+
+<body>
+<!-- Header inclus via JS -->
+<div id="header-placeholder"></div>
+
+<main class="flex-grow-1 container my-2 mb-5">
+  <h3 class="text-center mb-2">Une question ? Un message ? On est là pour vous! 🌱</h3>
+
+<form action="../config/traitement_contact.php" method="POST" class="row g-2">
+    <div class="col-12 d-flex justify-content-center">
+      <div class="input-wrapper">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+      <div class="input-wrapper">
+        <label for="sujet" class="form-label">Sujet</label>
+        <input type="text" class="form-control" id="sujet" name="sujet" required>
+      </div>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+      <div class="input-wrapper message">
+        <label for="message" class="form-label">Message</label>
+        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+      </div>
+    </div>
+
+    <div class="col-12 text-center">
+    <a href="confirmation_contact.html" class="btn custom-btn px-4">Envoyer</a>
+    </div>
+  </form>
+</main>
+
+  <!-- Footer via JS -->
+    <div id="footer-placeholder"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    </body>
+  </html>

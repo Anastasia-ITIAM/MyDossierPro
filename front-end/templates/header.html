@@ -1,0 +1,39 @@
+<header class="py-3 mb-4 border-bottom">
+    <nav class="navbar navbar-expand-md">
+        <div class="container">
+
+            <!-- Logo -->
+            <a href="/index.html" class="logo-container text-decoration-none">
+                <img src="../assets/logo.svg" alt="Logo d'EcoRide" width="40" height="40">
+                <span class="brand-name">EcoRide</span>
+            </a>
+
+            <!-- Bouton menu burger -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ecoNavbar" aria-controls="ecoNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenu collapsible -->
+            <div class="collapse navbar-collapse mt-3 mt-md-0" id="ecoNavbar">
+                <!-- Navigation -->
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 text-center">
+                    <li class="nav-item"><a href="/index.html" class="nav-link px-3">Accueil</a></li>
+                    <li class="nav-item"><a href="/pages/searchTrip.html" class="nav-link px-3">Covoiturages</a></li>
+                    <li class="nav-item"><a href="/pages/contact.html" class="nav-link px-3">Contacts</a></li>
+                </ul>
+
+                <!-- Connexion / Inscription -->
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 text-center text-md-start">
+                    <div id="user-greeting"></div>
+                    <div id="auth-buttons">
+                        <a href="/pages/signUp.html" class="btn custom-btn">S'inscrire</a>
+                        <a href="/pages/signIn.html" class="btn custom-btn">Connexion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<a href="javascript:history.back()" class="back-link fixed">
+    ← Retour
+

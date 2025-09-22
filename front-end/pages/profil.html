@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EcoRide</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- CSS perso -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Script perso -->
+    <script type="module" src="/js/main.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+</head>
+
+<body class="profil-page">
+    <!-- Header inclus via JS -->
+<div id="header-placeholder"></div>
+
+
+
+    <!-- Contenu -->
+    <div class="container my-4">
+        <h2 class="text-center mb-4">Mon profil 🌍</h2>
+
+        <div class="row">
+        <!-- Colonne gauche -->
+        <div class="col-md-4 text-center p-4 shadow rounded">
+            <img id="profileImage" src="" alt="Pic profil" 
+                class="img-fluid rounded-circle mb-3" style="width:150px; height:150px; object-fit:cover;">
+
+            <h4>Bonjour, <strong id="profilePseudo"></strong> 👋</h4>
+            <p>
+            Vous êtes enregistré(e) comme <strong id="profileRole"></strong><br>
+            Vous possédez <strong id="profileCredits"></strong> crédits</strong>
+            </p>
+
+            <div class="d-grid gap-3 w-50 mx-auto">
+            <a id="btnDriver" href="becomeDriver.html" class="btn custom-btn">Devenir chauffeur</a>
+            <a id="btnPublishTrip" href="publishTrip.html" class="btn custom-btn">Publier un trajet</a>
+            <a href="myTrips.html" class="btn custom-btn">Mes trajets</a>
+            <a id="btnMyCars" href="myCars.html" class="btn custom-btn">Mes véhicules</a>
+            </div>
+        </div>
+
+        <!-- Colonne droite -->
+        <div class="col-md-8 p-4 shadow rounded">
+        <h5 class="text-center mb-4 text-danger">Vous devez compléter votre profil</h5>
+            <form id="updateProfileForm" enctype="multipart/form-data" novalidate>
+            <input type="hidden" name="_method" value="PUT">
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" autocomplete="email"  required>
+            </div>
+
+            <div class="mb-3">
+                <label for="pseudo">Pseudo</label>
+                <input type="text" id="pseudo" name="pseudo" class="form-control" autocomplete="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="firstName">Prénom</label>
+                <input type="text" id="firstName" name="firstName" class="form-control" autocomplete="given-name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="lastName">Nom de famille</label>
+                <input type="text" id="lastName" name="lastName" class="form-control" autocomplete="family-name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="birthDate">Date de naissance</label>
+                <input type="date" id="birthDate" name="birthDate" class="form-control" autocomplete="bday"r equired>
+            </div>
+
+            <div class="mb-3">
+                <label for="postalAddress">Adresse postale</label>
+                <textarea id="postalAddress" name="postalAddress" class="form-control" autocomplete="street-address" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" class="form-control" autocomplete="tel" required>
+            </div>
+
+            <div class="mb-3 ">
+                <label for="photo_profil">Photo de profil</label>
+                <input type="file" id="photo_profil" name="photo_profil" accept="image/*" class="form-control">
+            </div>
+            
+            <div class="mb-3 position-relative">
+                <label for="password">Nouveau mot de passe</label>
+                <input type="password" id="password" name="password" class="form-control" autocomplete="new-password">
+                <button type="button" id="togglePassword" class="btn btn-sm">👁️</button>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" autocomplete="new-password">                
+                <button type="button" id="toggleConfirmPassword" class="btn btn-sm">👁️</button>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn custom-btn mb-4">Enregistrer</button>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+
+<!-- Footer via JS -->
+        <div id="footer-placeholder"></div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EcoRide - Mes trajets</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- CSS perso -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Script perso -->
+    <script type="module" src="/js/main.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    </head>
+<body class="trips-page">
+    <!-- Header inclus via JS -->
+    <div id="header-placeholder"></div>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Mes trajets ✅</h2>
+
+        <!-- Onglets -->
+        <ul class="nav nav-tabs justify-content-center mb-4" id="trajetsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link eco-box active" id="avenir-tab" data-bs-toggle="tab" data-bs-target="#avenir" type="button" role="tab" aria-controls="avenir" aria-selected="true">À venir</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link eco-box" id="passes-tab" data-bs-toggle="tab" data-bs-target="#passes" type="button" role="tab" aria-controls="passes" aria-selected="false">Passés</button>
+        </li>
+        </ul>
+
+        <!-- Contenu des onglets -->
+        <div class="tab-content" id="trajetsTabContent">
+
+        <!-- À venir -->
+        <div class="tab-pane fade show active" id="avenir" role="tabpanel" aria-labelledby="avenir-tab">
+            <div class="row"></div>
+        </div>
+
+        <!-- Passés -->
+        <div class="tab-pane fade" id="passes" role="tabpanel" aria-labelledby="passes-tab">
+            <div class="row"></div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Footer via JS -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

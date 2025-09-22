@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoRide - Détails du trajet</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- CSS perso -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Script perso -->
+  <script type="module" src="/js/main.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+</head>
+
+<body class="trip-details-page">
+  <!-- Header inclus via JS -->
+  <div id="header-placeholder"></div>
+
+  <div class="container my-5">
+    <h2 class="text-center mb-5">En route vers un trajet plus vert 🥝</h2>
+
+    <div class="row">
+      <!-- Infos trajet -->
+      <div class="col-md-6 mb-4">
+        <div class="card eco-box p-3 shadow-sm h-100">
+          <h4 class="mb-3 text-center">Infos du trajet</h4>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item eco-box"><strong>Départ :</strong> <span id="trip-departure"></span></li>
+            <li class="list-group-item eco-box"><strong>Arrivée :</strong> <span id="trip-arrival"></span></li>
+            <li class="list-group-item eco-box"><strong>Date :</strong> <span id="trip-date"></span></li>
+            <li class="list-group-item eco-box"><strong>Heure :</strong> <span id="trip-time"></span></li>
+            <li class="list-group-item eco-box"><strong>Prix :</strong> <span id="trip-price"></span></li>
+            <li class="list-group-item eco-box"><strong>Places disponibles :</strong> <span id="trip-seats"></span></li>
+            <li class="list-group-item eco-box"><strong>Écologique :</strong> <span id="trip-eco"></span></li>
+            <li class="list-group-item eco-box"><strong>Conducteur :</strong> <span id="trip-driver"></span></li>
+            <li class="list-group-item eco-box"><strong>Véhicule :</strong> <span id="trip-vehicle"></span></li>
+          </ul>
+          <div id="delete-trip-container" class="text-center mt-3"></div>
+        </div>
+      </div>
+
+      <!-- Avis -->
+      <div class="col-md-6 mb-4">
+        <div class="card eco-box p-3 shadow-sm h-100">
+          <h4 class="text-center mb-3">Avis des passagers</h4>
+          <ul class="list-group list-group-flush" id="trip-reviews" style="max-height: 300px; overflow-y: auto;">
+            <!-- Avis injectés dynamiquement -->
+          </ul>
+
+          <!-- Formulaire pour ajouter un avis -->
+          <form id="trip-review-form" class="mt-3">
+            <div class="mb-2">
+              <textarea id="review-comment" class="form-control" placeholder="Votre avis..." required></textarea>
+            </div>
+            <div class="mb-2">
+              <select id="review-rating" class="form-select" required>
+                <option value="">Note</option>
+                <option value="1">⭐ 1</option>
+                <option value="2">⭐ 2</option>
+                <option value="3">⭐ 3</option>
+                <option value="4">⭐ 4</option>
+                <option value="5">⭐ 5</option>
+              </select>
+            </div>
+            <div style="text-align: center;">
+              <button type="submit" class="btn custom-btn w-100">Laisser un avis</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth -->
+    <div id="auth-box" class="text-center mt-4">
+      <div class="alert alert-info mb-4">Connectez-vous pour réserver ce trajet.</div>
+      <a href="signIn.html" class="btn custom-btn mx-2">Se connecter</a>
+      <a href="signUp.html" class="btn custom-btn mx-2">Créer un compte</a>
+    </div>
+
+    <!-- Passagers -->
+    <div class="container mt-4" style="max-width: 600px;">
+      <div class="card eco-box shadow-sm">
+        <div class="card-header text-white" style="background-color: var(--eco-green); font-family: var(--eco-font);">
+          <h5 class="mb-0">🐸 Passagers inscrits à ce trajet</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group" id="trip-passengers">
+            <!-- Passagers injectés dynamiquement -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer via JS -->
+  <div id="footer-placeholder"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script qui récupère l'ID depuis l'URL -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const tripId = urlParams.get("id");
+    if (tripId) {
+      document.body.dataset.tripId = tripId;
+    } else {
+      console.error("Aucun ID de trajet fourni dans l’URL !");
+    }
+  </script>
+</body>
+</html>

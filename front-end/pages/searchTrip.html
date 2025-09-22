@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoRide - Recherche</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- CSS perso -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Script perso -->
+  <script type="module" src="/js/main.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+</head>
+
+<body class="trip-search-page">
+  <!-- Header inclus via JS -->
+  <div id="header-placeholder"></div>
+
+  <main class="flex-grow-1 container my-4">
+    <h3 class="text-center mb-4">Partez à l'aventure en quelques clics !</h3>
+
+    <!-- Formulaire de recherche -->
+    <div class="my-3">
+      <form id="rechercheForm" method="GET" action="searchTrip.html">
+        <div class="row justify-content-center">
+          <div class="col-md-7">
+            <div class="d-flex align-items-end justify-content-center gap-2">
+              <div style="flex: 1;">
+                <input type="text" class="form-control" name="depart" id="depart" placeholder="Départ" required />
+              </div>
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <button type="button" id="swapBtn" class="arrow-swap-btn">&#x21C4;</button>
+              </div>
+              <div style="flex: 1;">
+                <input type="text" class="form-control" name="arrivee" id="arrivee" placeholder="Arrivée" required />
+              </div>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+              <div class="col-md-6 text-center">
+                <input type="datetime-local" class="form-control" name="datetime" id="datetime" />
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn custom-btn mb-4">Rechercher</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Résultats dynamiques -->
+    <div class="container mt-4">
+      <div class="row" id="resultsContainer">
+        <!-- Les trajets seront injectés ici par searchTrip.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer via JS -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Bootstrap Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+services:
+  php:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    container_name: ecoride-php
+    volumes:
+      - ./back-end:/var/www/html
+    environment:
+      - APP_ENV=dev
+      - DATABASE_URL=${DATABASE_URL}
+      - MONGODB_URL=${MONGODB_URL}
+    depends_on:
+      - mysql
+      - mongo
+
+  web:
+    image: nginx:1.29-alpine
+    container_name: ecoride-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./back-end/public:/var/www/html/public:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  frontend:
+    image: nginx:1.29-alpine
+    container_name: ecoride-frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./front-end:/usr/share/nginx/html:ro
+
+  mysql:
+    image: mysql:8.0
+    container_name: ecoride-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecoride
+      MYSQL_USER: ecoride
+      MYSQL_PASSWORD: ecoride
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    platform: linux/amd64        # qemu émulation pour Mac ARM
+    container_name: ecoride-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+  mongo:
+    image: mongo:6.0
+    container_name: ecoride-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    platform: linux/amd64        # qemu émulation pour Mac ARM
+    container_name: ecoride-mongo-express
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+    ports:
+      - "8082:8081"
+    depends_on:
+      - mongo
+
+volumes:
+  mysql-data:
+  mongo-data:

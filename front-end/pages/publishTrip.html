@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EcoRide</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- CSS perso -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Script perso -->
+    <script type="module" src="/js/main.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+</head>
+
+<body class="publishTrip-page">
+<!-- Header inclus via JS -->
+<div id="header-placeholder"></div>
+
+    <div class="container my-5" style="max-width: 700px;">
+        <h2 class="text-center mb-4">Publier un trajet ♻️</h2>
+
+    
+        <form id="publish_trip">
+        <div class="mb-3">
+            <label for="adresse_depart" class="form-label">Ville de départ *</label>
+            <input type="text" name="adresse_depart" id="adresse_depart" class="form-control" required value="">
+        </div>
+
+        <div class="mb-3">
+            <label for="adresse_arrivee" class="form-label">Ville d’arrivée *</label>
+            <input type="text" name="adresse_arrivee" id="adresse_arrivee" class="form-control" required value="">
+        </div>
+
+        <div class="mb-3">
+            <label for="date_depart" class="form-label">Date de départ *</label>
+            <input type="date" name="date_depart" id="date_depart" class="form-control" required value="">
+        </div>
+
+        <div class="mb-3">
+            <label for="heure_depart" class="form-label">Heure de départ *</label>
+            <input type="time" name="heure_depart" id="heure_depart" class="form-control" required value="">
+        </div>
+
+        <div class="mb-3">
+            <label for="heure_arrivee" class="form-label">Heure d'arrivée *</label>
+            <input type="time" name="heure_arrivee" id="heure_arrivee" class="form-control" required value="">
+        </div>
+
+        <div class="mb-3">
+            <label for="places_disponibles" class="form-label">Places disponibles *</label>
+            <input type="number" name="places_disponibles" id="places_disponibles" class="form-control" min="1" required value="">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Voyage écologique ?</label>
+            <select name="voyage_ecologique" class="form-select eco-select">
+            <option value="1">Oui</option>
+            <option value="0" selected>Non</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="prix" class="form-label">Prix (crédit) fixé par vous *</label>
+            <input type="number" name="prix" id="prix" class="form-control" min="1" step="1" required value="">
+            <small class="form-text text-muted">2 crédits seront automatiquement prélevés par la plateforme.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="vehicule_id" class="form-label">Choisir un véhicule *</label>
+            <select name="vehicule_id" id="vehicule_id" class="form-select" required>
+            <option value="">-- Sélectionner --</option>
+            </select>
+        </div>
+
+        <div class="text-center mt-4">
+        <button type="submit" class="btn custom-btn">Publier ce trajet</button>
+        </div>
+        </form>
+    </div>
+
+
+<!-- Footer via JS -->
+        <div id="footer-placeholder"></div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
