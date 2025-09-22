@@ -76,13 +76,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $status = 'active';
 
-/* #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+#[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $cars;
 
     public function __construct()
     {
         $this->cars = new ArrayCollection();
-    }*/
+    }
 
     // GETTERS ET SETTERS 
 
@@ -120,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void {}
 
     //  CARS RELATION 
-    /* public function getCars(): Collection { return $this->cars; }
+    public function getCars(): Collection { return $this->cars; }
 
     public function addCar(Car $car): static
     {
@@ -139,5 +139,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
         return $this;
-    }*/
+    }
 }
