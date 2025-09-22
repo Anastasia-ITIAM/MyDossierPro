@@ -3,19 +3,22 @@ const USERID_KEY = 'userId';
 let isLoggingOut = false;
 const isDev = window.location.hostname === 'localhost';
 
-// Supprime les caractères HTML pour éviter XSS
+// ----------------------
+// Utilitaires sécurité
+// ----------------------
 function sanitizeInput(input) {
     return input.replace(/[<>]/g, "");
 }
 
-// Alert sécurisée
 function safeAlert(message) {
     const div = document.createElement('div');
     div.textContent = Array.isArray(message) ? message.join('\n') : message;
     alert(div.textContent);
 }
 
+// ----------------------
 // Gestion du token JWT
+// ----------------------
 export function setToken(token) { localStorage.setItem(TOKEN_KEY, token); }
 export function getToken() { return localStorage.getItem(TOKEN_KEY); }
 export function removeToken() { localStorage.removeItem(TOKEN_KEY); }
@@ -41,13 +44,13 @@ export function logout(redirect = true) {
     localStorage.removeItem(USERID_KEY);
 
     if (redirect) {
-        setTimeout(() => {
-            window.location.href = '/pages/signIn.html';
-        }, 50);
+        window.location.replace('/pages/signIn.html');
     }
 }
 
+// ----------------------
 // Fetch protégé avec JWT
+// ----------------------
 export async function authFetch(url, options = {}, forceAuth = true) {
     const token = getToken();
 
@@ -70,10 +73,12 @@ export async function authFetch(url, options = {}, forceAuth = true) {
     return res;
 }
 
+// ----------------------
 // Connexion utilisateur sécurisée
+// ----------------------
 export async function login(email, password) {
     try {
-        const res = await fetch('http://localhost:8081/api/auth/login', {
+        const res = await fetch('http://localhost:8080/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: sanitizeInput(email), password })
@@ -86,15 +91,15 @@ export async function login(email, password) {
             setToken(data.token);
             if (isDev) console.log('Token stocké avec succès (contenu caché)');
 
-            // Décodage JWT pour récupérer uniquement l'ID utilisateur
+            // Décodage JWT pour récupérer l'ID utilisateur
             try {
                 const payload = JSON.parse(atob(data.token.split('.')[1]));
-                if (payload.userId) {
-                    setUserId(payload.userId);
-                    if (isDev) console.log('User ID stocké :', payload.userId);
+                if (payload.id) {
+                    setUserId(payload.id);
+                    if (isDev) console.log('User ID stocké :', payload.id);
                 }
             } catch (err) {
-                if (isDev) console.error('Erreur décodage JWT pour userId :', err);
+                if (isDev) console.error('Erreur décodage JWT pour id :', err);
             }
 
             return { status: 'ok' };
@@ -107,7 +112,9 @@ export async function login(email, password) {
     }
 }
 
+// ----------------------
 // Initialisation formulaire login
+// ----------------------
 export function initSignIn() {
     const form = document.getElementById('signInForm');
     if (!form) return;
@@ -124,8 +131,9 @@ export function initSignIn() {
         try {
             const result = await login(email, password);
             if (result.status === 'ok') {
-                safeAlert('Connexion réussie !');
-                setTimeout(() => window.location.href = '/pages/profil.html', 50);
+                safeAlert('Connexion réussie ! 🎉');
+                // Redirection vers le profil
+                window.location.replace('/pages/profil.html');
             } else {
                 safeAlert(result.message);
             }
@@ -136,10 +144,12 @@ export function initSignIn() {
     });
 }
 
+// ----------------------
 // Récupération infos utilisateur
+// ----------------------
 export async function getMe(forceAuth = true) {
     try {
-        const res = await authFetch('http://localhost:8081/api/auth/me', {}, forceAuth);
+        const res = await authFetch('http://localhost:8080/api/auth/me', {}, forceAuth);
         const data = await res.json();
         if (data && data.id) setUserId(data.id);
         return data;

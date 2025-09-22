@@ -1,6 +1,8 @@
 import { login } from './signIn.js';
 
+// ----------------------
 // Utilitaires sécurité
+// ----------------------
 function sanitizeInput(input) {
     return input.replace(/[<>]/g, "");
 }
@@ -11,6 +13,9 @@ function safeAlert(message) {
     alert(div.textContent);
 }
 
+// ----------------------
+// Initialisation formulaire signup
+// ----------------------
 export function initSignUp() {
 
     // Validation front
@@ -49,13 +54,12 @@ export function initSignUp() {
         try {
             console.log("📤 Data envoyée au backend :", data);
 
-            const response = await fetch('http://localhost:8081/api/user', {
+            const response = await fetch('http://localhost:8080/api/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
-            // Sécurisation : lire d'abord en texte
             const text = await response.text();
             let result;
             try {
@@ -66,14 +70,16 @@ export function initSignUp() {
             }
 
             if (response.ok && result.success) {
+                // Connexion automatique après inscription
                 const loginResult = await login(email, password);
 
                 if (loginResult.status === 'ok') {
-                safeAlert('Inscription et connexion réussies ! 🎉\nFélicitations, vous avez gagné 20 crédits pour votre inscription !');
-                    window.location.href = '/pages/profil.html';
+                    safeAlert('Inscription et connexion réussies ! 🎉\nFélicitations, vous avez gagné 20 crédits pour votre inscription !');
+                    window.location.href = '/pages/profil.html'; // redirection vers profil
                 } else {
-                    safeAlert('Inscription réussie, mais impossible de se connecter automatiquement. Veuillez vous connecter.');
-                    window.location.href = '/pages/signIn.html';
+                    // Si connexion automatique échoue
+                    safeAlert('Inscription réussie, mais impossible de se connecter automatiquement.\nVeuillez vous connecter pour profiter de vos crédits.');
+                    window.location.href = '/pages/signIn.html'; // redirection vers login
                 }
             } else {
                 safeAlert(result.message || 'Erreur serveur');
